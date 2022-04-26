@@ -15,7 +15,7 @@ import java.util.List;
 
 
 @Service
-public class UserServiceImp implements UserService{
+public class UserServiceImp implements UserService {
 
 
     private UserRepo userRepo;
@@ -47,7 +47,7 @@ public class UserServiceImp implements UserService{
 
     @Override
     public User getUser(Long id) {
-       return userRepo.getById(id);
+        return userRepo.getById(id);
     }
 
     @Override
@@ -71,6 +71,16 @@ public class UserServiceImp implements UserService{
     public void editUser(User user) {
 
         if (user.getPassword().equals(userRepo.findUserByEmail(user.getEmail()).getPassword())) {
+            userRepo.save(user);
+        } else if (user.getPassword().equals("") & user.getRoles() != null) {
+            user.setPassword(userRepo.findUserByEmail(user.getEmail()).getPassword());
+            userRepo.save(user);
+        } else if (user.getRoles() == null) {
+            user.setRoles(findUserByEmail(user.getEmail()).getRoles());
+            saveUser(user);
+        } else if (user.getPassword().equals("") && user.getRoles() == null) {
+            user.setPassword(userRepo.findUserByEmail(user.getEmail()).getPassword());
+            user.setRoles(findUserByEmail(user.getEmail()).getRoles());
             userRepo.save(user);
         }
     }
