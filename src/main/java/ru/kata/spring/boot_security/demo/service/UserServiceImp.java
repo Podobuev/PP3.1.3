@@ -82,6 +82,8 @@ public class UserServiceImp implements UserService {
             user.setPassword(userRepo.findUserByEmail(user.getEmail()).getPassword());
             user.setRoles(findUserByEmail(user.getEmail()).getRoles());
             userRepo.save(user);
+        } else {
+            saveUser(user);
         }
     }
 
